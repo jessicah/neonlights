@@ -175,7 +175,7 @@ class City {
 public:
   float x, y;
   BPoint path[0x201];
-  int count = 0;
+  int count;
   int other;
   float vx, vy;
   rgb_color myc;
@@ -205,6 +205,7 @@ static const int kMaxCities = 64;
 City cities[kMaxCities];
 
 void NeonSparkles::_Move(City* city, BView* view) {
+    float delta;
     city->vx += (cities[city->other].x-city->x)/view->Bounds().Width();
     city->vy += (cities[city->other].y-city->y)/view->Bounds().Height();
 
@@ -220,7 +221,7 @@ void NeonSparkles::_Move(City* city, BView* view) {
 		city->x += city->vx;
     if (city->y > 0 && city->y < view->Bounds().Height())
 		city->y += city->vy;
-    int delta = fSpotSize * 8;
+    delta = fSpotSize * 8;
     if (city->x < -delta || city->x > view->Bounds().Width() + delta) {
 		city->vx = -city->vx;
 		city->y = random() % (int)view->Bounds().Height();
@@ -236,14 +237,15 @@ void NeonSparkles::_Move(City* city, BView* view) {
 
 void NeonSparkles::_Restart(BView* view)
 {
+	float x,y;
 	float tinc = 2 * M_PI / fSpots;
 
 	float r = random();
 	r /= RAND_MAX;
 	r /= 2; // in range 0.0 - 0.5
 	r -= 0.25;
-	int x = r * (float)fWidth;
-	int y = r * (float)fHeight;
+	x = r * (float)fWidth;
+	y = r * (float)fHeight;
 	x = (fWidth / 2) + x;
 	y = (fHeight / 2) + y;
 
